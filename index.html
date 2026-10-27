@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Compass | Your Opportunity Dashboard</title>
+  <style>
+    :root {
+      --bg: #080d19;
+      --panel: #111a2b;
+      --panel2: #0c1423;
+      --line: #24324a;
+      --text: #edf3ff;
+      --muted: #9baac3;
+      --cyan: #50d7f5;
+      --green: #54e0b0;
+      --purple: #b4a0ff;
+      --orange: #ffc477;
+      --red: #ff8194;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; color: var(--text); background:
+        radial-gradient(ellipse at 10% 0%, #17274a 0%, transparent 36%),
+        radial-gradient(ellipse at 100% 20%, #142c38 0%, transparent 28%),
+        var(--bg);
+      font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1180px; width: calc(100% - 36px); margin: auto; }
+    header {
+      position: sticky; top: 0; z-index: 5; backdrop-filter: blur(16px);
+      background: #080d19df; border-bottom: 1px solid var(--line);
+    }
+    .nav { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 19px; font-weight: 800; letter-spacing: -.4px; }
+    .logo { display: grid; place-items: center; width: 39px; height: 39px; border-radius: 12px; color: #07131d; background: linear-gradient(135deg,var(--cyan),var(--green)); font-weight: 900; }
+    .brand small { display: block; color: var(--muted); font-size: 11px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; }
+    nav { display: flex; flex-wrap: wrap; gap: 18px; }
+    nav a { color: var(--muted); font-size: 13px; font-weight: 650; }
+    nav a:hover { color: var(--text); }
+    .hero { padding: 48px 0 25px; display: grid; grid-template-columns: 1.4fr .8fr; gap: 24px; align-items: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; border: 1px solid #2b5b60; color: var(--green); background: #102b2c88; border-radius: 99px; padding: 5px 10px; font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; }
+    h1 { font-size: clamp(32px, 5vw, 54px); line-height: 1.06; letter-spacing: -2px; margin: 16px 0; }
+    h1 span { color: var(--cyan); }
+    .lead { color: var(--muted); max-width: 640px; margin: 0 0 22px; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn { cursor: pointer; border: 1px solid var(--line); background: var(--panel); color: var(--text); padding: 10px 15px; border-radius: 10px; font: inherit; font-weight: 700; }
+    .btn.primary { color: #06131a; border-color: transparent; background: linear-gradient(120deg,var(--cyan),var(--green)); }
+    .btn:hover { filter: brightness(1.1); }
+    .hero-card { background: linear-gradient(145deg,#17243b,#0d1525); border: 1px solid #2b3a54; border-radius: 20px; padding: 22px; box-shadow: 0 20px 55px #0003; }
+    .hero-card .mini-title { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1.1px; font-weight: 800; }
+    .hero-card h2 { margin: 8px 0 4px; font-size: 25px; }
+    .hero-card p { margin: 0; color: var(--muted); font-size: 13px; }
+    .api-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 17px; }
+    .pill { border: 1px solid var(--line); border-radius: 99px; padding: 5px 9px; color: #c7d5eb; font-size: 11px; background: #09111e; }
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 13px; margin: 12px 0 30px; }
+    .stat { background: #111a2bd9; border: 1px solid var(--line); border-radius: 15px; padding: 17px; }
+    .stat .number { font-size: 26px; font-weight: 850; letter-spacing: -.7px; }
+    .stat .label { color: var(--muted); font-size: 12px; }
+    .stat .emoji { float: right; font-size: 19px; }
+    section { scroll-margin-top: 88px; margin: 28px 0; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 15px; margin-bottom: 14px; }
+    .section-head h2 { margin: 0; font-size: 22px; letter-spacing: -.5px; }
+    .section-head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
+    .section-label { color: var(--cyan); font-size: 11px; font-weight: 850; letter-spacing: 1.5px; text-transform: uppercase; }
+    .panel { background: #10192aeF; border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 15px; }
+    input, select { min-width: 0; color: var(--text); background: #080f1d; border: 1px solid #2a3850; border-radius: 10px; padding: 11px 12px; font: inherit; outline: none; }
+    input:focus, select:focus { border-color: var(--cyan); }
+    .toolbar input { flex: 1 1 220px; }
+    .toolbar select { flex: 0 1 175px; }
+    .job-grid, .news-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+    .job, .news, .holiday { background: #080f1d; border: 1px solid #202e44; border-radius: 13px; padding: 16px; min-width: 0; }
+    .job-top { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+    .job h3, .news h3 { margin: 7px 0; font-size: 16px; line-height: 1.35; }
+    .company { color: var(--muted); font-size: 12px; }
+    .tag { display: inline-block; font-size: 10px; border-radius: 99px; padding: 4px 8px; font-weight: 800; letter-spacing: .5px; }
+    .tag.remotive { color: var(--cyan); background: #103041; }
+    .tag.arbeitnow { color: var(--purple); background: #282144; }
+    .job-meta { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0; }
+    .job-meta span { color: var(--muted); border: 1px solid #243148; padding: 3px 7px; border-radius: 7px; font-size: 11px; }
+    .job-footer { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; }
+    .small-link { font-size: 12px; font-weight: 800; }
+    .save { background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; padding: 6px 9px; }
+    .save.saved { color: var(--green); border-color: #286451; }
+    .news h3 { font-size: 15px; }
+    .news p { color: var(--muted); font-size: 12px; margin: 5px 0 12px; }
+    .news-foot { display: flex; justify-content: space-between; color: var(--muted); font-size: 11px; gap: 8px; }
+    .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .tool-title { display: flex; align-items: center; gap: 9px; margin: 0 0 6px; font-size: 17px; }
+    .tool-desc { color: var(--muted); font-size: 12px; margin: 0 0 15px; }
+    .convert-row { display: grid; grid-template-columns: 1fr 105px; gap: 8px; margin: 9px 0; }
+    .convert-row input { width: 100%; }
+    .convert-row select { width: 100%; }
+    .result { background: #07141b; border: 1px solid #22564d; padding: 13px; border-radius: 10px; margin-top: 10px; }
+    .result small { display: block; color: var(--muted); }
+    .result strong { font-size: 22px; color: var(--green); overflow-wrap: anywhere; }
+    .holiday-list { display: grid; gap: 9px; }
+    .holiday { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; }
+    .holiday strong { font-size: 13px; }
+    .holiday span { color: var(--muted); font-size: 12px; text-align: right; }
+    .status { color: var(--muted); font-size: 12px; margin: 10px 0 0; }
+    .status.error { color: var(--red); }
+    .status.ok { color: var(--green); }
+    .empty { color: var(--muted); text-align: center; padding: 24px 10px; grid-column: 1/-1; }
+    footer { border-top: 1px solid var(--line); margin-top: 40px; padding: 24px 0 34px; color: var(--muted); font-size: 12px; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+    .note { color: var(--muted); font-size: 11px; margin-top: 10px; }
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; padding-top: 32px; }
+      .hero-card { display: none; }
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .job-grid, .news-grid, .tools-grid { grid-template-columns: 1fr; }
+      nav { gap: 10px; }
+      nav a { font-size: 12px; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 420px) {
+      .wrap { width: calc(100% - 22px); }
+      .nav { align-items: start; padding: 13px 0; flex-direction: column; }
+      .panel { padding: 13px; }
+      .convert-row { grid-template-columns: 1fr 90px; }
+    }
+
+    /* Career Compass visual refresh: high-contrast, structured, responsive */
+    :root{--bg:#07111f;--panel:#101f33;--panel2:#0b192a;--line:#29415b;--text:#f3f8ff;--muted:#a7bbd0;--cyan:#5ee7f5;--green:#67f0bc;--purple:#c5a7ff;--orange:#ffc978;--red:#ff8299}
+    body{background:radial-gradient(ellipse at 12% -5%,#164d68 0%,transparent 34%),radial-gradient(ellipse at 95% 8%,#34255e 0%,transparent 28%),linear-gradient(180deg,#07111f 0%,#091525 48%,#07111f 100%);font-size:15px;line-height:1.6}
+    body:before{content:"";position:fixed;inset:0 0 auto;height:4px;z-index:20;background:linear-gradient(90deg,#57e3f4,#66efbd,#bda1ff,#ffca78)}
+    .wrap{max-width:1240px;width:calc(100% - 48px)}
+    header{background:rgba(5,14,27,.88);border-bottom:1px solid #29415b;box-shadow:0 8px 30px #0002}
+    .nav{min-height:78px}.brand{font-size:20px}.logo{width:44px;height:44px;border-radius:14px;box-shadow:0 0 24px #5ee7f533}
+    nav{gap:8px}nav a{padding:9px 12px;border-radius:10px;transition:background .2s,color .2s}nav a:hover{background:#18314a;color:var(--cyan);text-decoration:none}
+    .hero{padding:62px 0 34px;grid-template-columns:1.25fr .75fr;gap:34px}
+    .eyebrow{padding:7px 13px;background:#103b42;border-color:#28676d;box-shadow:0 0 28px #4ee3d311}
+    h1{font-size:clamp(38px,5.4vw,66px);letter-spacing:-2.8px;line-height:1.02;margin:21px 0 18px}h1 span{background:linear-gradient(100deg,#60e7f5,#74f0bd);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{font-size:16px;line-height:1.8;max-width:680px}
+    .btn{border-radius:12px;padding:12px 17px;transition:transform .18s,box-shadow .18s,filter .18s;background:#13253b;border-color:#304964}.btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px #0003}.btn.primary{background:linear-gradient(115deg,#5ee7f5,#67f0bc);box-shadow:0 8px 25px #5ee7f51c}
+    .hero-card{position:relative;overflow:hidden;background:linear-gradient(145deg,#152c47,#102135 72%,#102b35);border:1px solid #36516c;border-radius:24px;padding:28px;box-shadow:0 24px 70px #0004}.hero-card:after{content:"✦";position:absolute;right:20px;top:5px;font-size:100px;line-height:1;color:#5ee7f50b}.hero-card h2{font-size:30px;letter-spacing:-.8px}.hero-card p{font-size:14px;line-height:1.7}.api-pills{gap:8px}.pill{background:#0c1b2d;border-color:#304a63;color:#d5e8f8;padding:6px 10px}
+    .stats{gap:16px;margin:8px 0 42px}.stat{position:relative;overflow:hidden;min-height:112px;padding:21px;background:linear-gradient(145deg,#12243a,#0d1b2e);border:1px solid #29445f;border-radius:18px;box-shadow:0 12px 30px #0002;transition:transform .2s,border-color .2s}.stat:hover{transform:translateY(-3px);border-color:#4f839a}.stat:after{content:"";position:absolute;left:0;bottom:0;width:100%;height:3px;background:linear-gradient(90deg,#5ee7f5,#67f0bc);opacity:.8}.stat .number{font-size:32px;line-height:1.25;color:#f5fbff}.stat .label{font-size:12px;letter-spacing:.35px}.stat .emoji{font-size:23px;filter:drop-shadow(0 3px 8px #5ee7f533)}
+    section{margin:38px 0 46px;scroll-margin-top:100px}.section-head{margin-bottom:18px;align-items:center}.section-head h2{font-size:27px;letter-spacing:-.8px}.section-head p{font-size:14px;line-height:1.6}.section-label{letter-spacing:1.8px;color:#68e6f3;margin-bottom:5px}
+    .panel{background:linear-gradient(145deg,rgba(17,34,55,.98),rgba(11,25,42,.98));border:1px solid #2b4561;border-radius:22px;padding:24px;box-shadow:0 18px 48px #0002}
+    .toolbar{gap:11px;margin-bottom:19px}input,select{background:#091727;border-color:#304963;border-radius:12px;padding:12px 14px;min-height:46px}input::placeholder{color:#7f96ad}input:focus,select:focus{border-color:#5ee7f5;box-shadow:0 0 0 3px #5ee7f51c}
+    .job-grid,.news-grid{gap:15px}.job,.news,.holiday{background:linear-gradient(145deg,#0b1a2c,#0a1727);border:1px solid #263f59;border-radius:17px;padding:19px;transition:transform .18s,border-color .18s,background .18s}.job:hover,.news:hover{transform:translateY(-3px);border-color:#4d8199;background:linear-gradient(145deg,#10243a,#0c1c2e)}
+    .job h3,.news h3{font-size:17px;line-height:1.45;letter-spacing:-.2px}.company{font-size:13px;color:#b0c4d8}.tag{padding:5px 9px;letter-spacing:.7px}.tag.remotive{color:#69e8f4;background:#103747;border:1px solid #20566a}.tag.arbeitnow{color:#d1b9ff;background:#292143;border:1px solid #4b3d70}.job-meta{gap:8px}.job-meta span{background:#102138;border-color:#2a435e;padding:5px 9px;font-size:11px}.save{padding:8px 11px;border-radius:10px;background:#102138}.save:hover{border-color:#5ee7f5;color:#5ee7f5}.save.saved{background:#103b33}
+    .news h3{font-size:16px}.news p{font-size:13px;line-height:1.65}.news-foot{font-size:12px;border-top:1px solid #20384f;padding-top:10px;margin-top:12px}
+    .tools-grid{gap:20px;align-items:stretch}.tools-grid>.panel{min-width:0}.tool-title{font-size:20px;margin:4px 0 8px}.tool-desc{font-size:13px;line-height:1.7;margin-bottom:18px}.convert-row{gap:10px;margin:11px 0}.result{background:linear-gradient(120deg,#0c292e,#0b202d);border-color:#27665e;border-radius:14px;padding:17px}.result strong{font-size:27px}.holiday-list{gap:10px}.holiday{border-radius:13px;padding:14px 16px;background:#0b1a2c}.holiday strong{font-size:14px}.holiday span{font-size:12px}.status{font-size:12px;line-height:1.6}.status.ok{color:#75f0bc}.status.error{color:#ff91a3}.empty{border:1px dashed #304963;border-radius:14px;background:#0b1a2b;padding:30px 14px}
+    footer{border-top:1px solid #29415b;background:#07101c;margin-top:55px;padding:28px 0 36px}footer .wrap{font-size:12px}
+    .note{border-left:3px solid #3b637b;padding:9px 13px;background:#0c1b2b;border-radius:0 9px 9px 0;line-height:1.7}
+    :focus-visible{outline:2px solid #5ee7f5;outline-offset:3px}
+    @media(max-width:760px){.wrap{width:calc(100% - 28px)}.nav{padding:12px 0;align-items:flex-start;flex-direction:column;gap:9px}nav{width:100%;gap:5px}nav a{padding:7px 9px}.hero{padding:38px 0 24px;gap:20px}.hero-card{display:block;padding:20px}.hero-card h2{font-size:25px}h1{font-size:clamp(37px,10vw,52px);letter-spacing:-1.8px}.lead{font-size:14px}.stats{gap:10px;margin-bottom:32px}.stat{padding:15px;min-height:100px}.stat .number{font-size:27px}.panel{padding:16px;border-radius:18px}.job-grid,.news-grid,.tools-grid{grid-template-columns:1fr}.section-head h2{font-size:24px}.holiday{align-items:flex-start}.holiday span{text-align:right;max-width:42%}}
+    .account-bar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:0 0 12px}.account-bar input{width:155px;min-height:38px;padding:8px 10px;font-size:12px}.account-bar .btn{padding:8px 11px;font-size:12px}.account-bar .status{margin:0;flex-basis:100%}
+    @media(max-width:760px){.account-bar{width:100%}.account-bar input{flex:1 1 135px}.account-bar .btn{flex:1}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+
+
+    /* Colourful visual refresh: vivid accents, gradient surfaces and section identity */
+    :root {
+      --bg: #080b1b; --panel: #11152d; --panel2: #151a35; --line: #34345d;
+      --text: #f7f5ff; --muted: #b0b6d4; --cyan: #54e7ff; --green: #6df7b5;
+      --purple: #c6a0ff; --orange: #ffca78; --red: #ff829e;
+    }
+    body {
+      background:
+        radial-gradient(ellipse at 4% 4%, #542a86a8 0%, transparent 30%),
+        radial-gradient(ellipse at 96% 8%, #075c78a0 0%, transparent 27%),
+        radial-gradient(ellipse at 75% 72%, #34206466 0%, transparent 32%),
+        linear-gradient(145deg,#080b1b,#0b1228 55%,#10102a);
+    }
+    header { background: #090d20e8; border-bottom-color: #39365f; }
+    .logo { background: linear-gradient(135deg,#52e6ff 0%,#7df6b5 48%,#c5a0ff 100%); box-shadow: 0 0 24px #54e7ff44; }
+    .hero { position: relative; }
+    .hero h1 span { background: linear-gradient(90deg,#54e7ff,#75f4bd 48%,#c6a0ff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .eyebrow { border-color:#4e4a8b; color:#8af7d1; background:linear-gradient(90deg,#172a4fbb,#25315c99); }
+    .hero-card { background:linear-gradient(135deg,#202752 0%,#142c47 48%,#2b1e4b 100%); border-color:#4a4d83; box-shadow:0 18px 60px #03061488; }
+    .api-pills .pill:nth-child(5n+1) { color:#70eaff; border-color:#286a85; background:#102b43; }
+    .api-pills .pill:nth-child(5n+2) { color:#8bf6c2; border-color:#286b59; background:#102f2b; }
+    .api-pills .pill:nth-child(5n+3) { color:#d1b5ff; border-color:#5d4687; background:#251c40; }
+    .api-pills .pill:nth-child(5n+4) { color:#ffd18a; border-color:#77552d; background:#30251a; }
+    .api-pills .pill:nth-child(5n) { color:#ff9eb2; border-color:#7c3c60; background:#321b32; }
+    .stat { background:linear-gradient(145deg,#171d3b,#11172d); border-color:#37385f; box-shadow:0 8px 24px #02051133; transition:transform .18s,border-color .18s; }
+    .stat:hover { transform:translateY(-3px); border-color:#6b66b5; }
+    .stat:nth-child(4n+1) .number { color:#54e7ff; }
+    .stat:nth-child(4n+2) .number { color:#6df7b5; }
+    .stat:nth-child(4n+3) .number { color:#c6a0ff; }
+    .stat:nth-child(4n) .number { color:#ffca78; }
+    .section-label { color:#7cebcf; }
+    #jobs .section-label { color:#54e7ff; }
+    #news .section-label { color:#c6a0ff; }
+    #currency .section-label { color:#6df7b5; }
+    #holidays .section-label { color:#ffca78; }
+    .panel { background:linear-gradient(145deg,#141a34f5,#10162bf5); border-color:#34385e; box-shadow:0 14px 38px #0205112e; }
+    input, select { background:#0b1025; border-color:#3b4267; }
+    input:focus, select:focus { border-color:#54e7ff; box-shadow:0 0 0 3px #54e7ff20; }
+    .job, .news, .holiday { background:linear-gradient(145deg,#10172d,#0c1225); border-color:#303958; transition:transform .18s,border-color .18s,box-shadow .18s; }
+    .job:hover, .news:hover, .holiday:hover { transform:translateY(-3px); border-color:#6867a3; box-shadow:0 12px 28px #02051155; }
+    .tag { border:1px solid transparent; }
+    .tag.remote { color:#7be9ff; background:#10364b; border-color:#245c78; }
+    .tag.full-time { color:#83f5bd; background:#12372d; border-color:#28664e; }
+    .tag.contract { color:#d0b5ff; background:#2a2045; border-color:#59427f; }
+    .btn.primary { background:linear-gradient(110deg,#54e7ff,#6df7b5); box-shadow:0 5px 18px #54e7ff26; }
+    .btn { transition:transform .16s,filter .16s,box-shadow .16s; }
+    .btn:hover { transform:translateY(-1px); box-shadow:0 6px 18px #0003; }
+    footer { border-top:1px solid #34345d; }
+    @media (max-width:700px) { .hero { gap:16px; } .panel { padding:15px; } .stat { padding:13px; } }
+
+
+    /* Professional visual refinement */
+    :root { --bg:#07111f; --panel:#0d1c2d; --panel2:#10243a; --line:#29445d; --text:#f4f8ff; --muted:#b1c2d6; --cyan:#59e1f2; --green:#69e8b8; --purple:#c3a6ff; --orange:#ffc77d; }
+    body { background: radial-gradient(ellipse at 12% 2%,#153451 0%,transparent 36%),radial-gradient(ellipse at 90% 32%,#1b2946 0%,transparent 32%),#07111f; letter-spacing:.005em; }
+    header { background:rgba(5,15,28,.88); border-bottom:1px solid #29445d; box-shadow:0 8px 32px #02071155; }
+    .brand { gap:13px; font-size:19px; letter-spacing:-.45px; }
+    .logo { background:linear-gradient(135deg,#4de5f5,#6cf0bb); color:#071523; box-shadow:0 0 0 5px #58e1f215,0 8px 24px #42d9ee20; }
+    nav a { border-radius:10px; transition:background .2s,color .2s; }
+    nav a:hover { background:#17344a; color:#74edfa; text-decoration:none; }
+    .hero { position:relative; isolation:isolate; padding:58px 0 32px; }
+    .hero:before { content:""; position:absolute; z-index:-2; inset:0 -28px 12px; border-radius:0 0 28px 28px; background:linear-gradient(90deg,rgba(5,17,32,.96) 0%,rgba(5,17,32,.82) 38%,rgba(5,17,32,.2) 100%),linear-gradient(0deg,#07111f 0%,transparent 42%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1900&q=85') center 43%/cover; opacity:.9; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; color:#74e9f5; background:#0b293a; border:1px solid #28556a; padding:7px 12px; border-radius:999px; font-size:11px; font-weight:800; letter-spacing:1.15px; text-transform:uppercase; }
+    h1 { font-size:clamp(42px,5.4vw,68px); line-height:1.03; letter-spacing:-2.7px; text-wrap:balance; max-width:720px; text-shadow:0 3px 30px #02071155; }
+    .lead { max-width:620px; color:#d0deed; font-size:16px; line-height:1.8; }
+    .btn { border:1px solid #3c5871; background:#10243a; color:#eaf5ff; box-shadow:0 5px 16px #0002; transition:transform .18s,box-shadow .18s,background .18s; }
+    .btn:hover { transform:translateY(-2px); box-shadow:0 10px 24px #0004; text-decoration:none; }
+    .btn.primary { background:linear-gradient(115deg,#45dff4,#63e9bb); color:#062031; border-color:transparent; font-weight:800; }
+    .hero-card { background:linear-gradient(145deg,rgba(14,40,61,.94),rgba(12,24,42,.96)); border:1px solid #41617b; box-shadow:0 22px 65px #02071166; backdrop-filter:blur(12px); }
+    .api-pills .pill { background:#0a1a2b; border-color:#36536d; }
+    .stats { gap:14px; margin-bottom:38px; }
+    .stat { background:linear-gradient(145deg,#10243a,#0b1b2d); border:1px solid #29455e; border-radius:17px; box-shadow:0 10px 28px #0002; transition:transform .18s,border-color .18s; }
+    .stat:hover { transform:translateY(-3px); border-color:#4b849c; }
+    .stat .emoji { display:grid; place-items:center; width:42px;height:42px;border-radius:13px;background:#17374a; }
+    .stat .number { font-size:30px; letter-spacing:-1px; }
+    section { scroll-margin-top:90px; }
+    .section-head { align-items:flex-end; margin-bottom:20px; }
+    .section-head h2,.tool-title { letter-spacing:-.8px; }
+    .panel { background:linear-gradient(145deg,#0e2033,#0a1727); border:1px solid #2b455e; border-radius:22px; box-shadow:0 16px 42px #0002; }
+    .job,.news,.holiday { background:rgba(7,20,34,.78); border-color:#2a435a; }
+    input,select,textarea { background:#081827 !important; color:#f1f7ff !important; border-color:#35516b !important; border-radius:11px !important; }
+    input:focus,select:focus,textarea:focus { outline:2px solid #53dff2 !important; outline-offset:2px; border-color:#53dff2 !important; }
+    button,select,a { -webkit-tap-highlight-color:transparent; }
+    .result { box-shadow:inset 0 1px #ffffff08; }
+    .status.ok { color:#79edbf; }
+    .empty { background:#0a1a2a; border-color:#36516a; }
+    footer { color:#9db3ca; border-top:1px solid #263f56; }
+    @media(max-width:760px) { .hero { padding-top:38px; } .hero:before { inset:0 -14px 8px; background-position:center; } h1 { letter-spacing:-1.8px; } .stats { margin-bottom:28px; } }
+    @media(prefers-reduced-motion:reduce) { *,*:before,*:after { scroll-behavior:auto !important; transition:none !important; animation:none !important; } }
+
+    /* Screenshot-inspired professional dashboard layout */
+    :root{--bg:#061326;--panel:#0a2036;--panel2:#081a2d;--line:#174563;--text:#f4f8ff;--muted:#a9c2db;--cyan:#25dff5;--green:#31e5bd;--purple:#b68aff;--orange:#ffb44e}
+    body{background:#061326;color:var(--text);overflow-x:hidden}
+    header{position:fixed;inset:0 auto 0 0;width:242px;z-index:20;background:linear-gradient(180deg,#041a30f5,#04182cf7);border-right:1px solid #123b57;border-bottom:0;backdrop-filter:blur(18px)}
+    .nav{width:100%;max-width:none;height:100%;min-height:0;padding:24px 12px;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:34px}
+    .brand{padding:0 8px;font-size:22px;align-items:center}.logo{width:48px;height:48px;flex-shrink:0;border-radius:50%;font-size:18px;background:linear-gradient(135deg,#24dff5,#168bff);color:#fff;box-shadow:0 0 30px #12c9ef35}.brand small{letter-spacing:1px;font-size:10px;margin-top:3px}
+    nav{display:flex;flex-direction:column;gap:7px;width:100%}nav a{padding:13px 14px;border-radius:12px;color:#d1e0f2;font-size:14px;font-weight:700;display:flex;align-items:center;gap:12px;transition:background .2s,color .2s}nav a:before{font-size:18px;width:24px;text-align:center;color:#7fdff0}nav a:nth-child(1):before{content:'▣'}nav a:nth-child(2):before{content:'▤'}nav a:nth-child(3):before{content:'⇄'}nav a:nth-child(4):before{content:'▦'}nav a:hover,nav a:focus{background:#075078;color:#48eaff;text-decoration:none}
+    .sidebar-note{margin-top:auto;padding:15px 16px 26px;color:#b7cbe0;display:flex;flex-direction:column;gap:10px}.mountain-mark{font-size:44px;color:#7eb6e6;line-height:1}.sidebar-note em{max-width:145px;font-size:14px;line-height:1.5}.sidebar-note i{width:42px;height:3px;background:#20d8e9;border-radius:5px;margin-top:7px}
+    main.wrap{width:auto;max-width:none;margin:0 22px 0 264px;padding:0 0 20px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:0 14px;align-items:stretch}
+    .hero{grid-column:1/-1;position:relative;isolation:isolate;min-height:292px;margin:0 -22px 18px;padding:46px 36px 30px;grid-template-columns:1fr;align-items:end;overflow:hidden;border-radius:0 0 20px 20px}
+    .hero:before{inset:0;z-index:-2;opacity:1;border-radius:0;background:linear-gradient(90deg,rgba(3,19,38,.96) 0%,rgba(4,22,42,.76) 43%,rgba(5,20,35,.12) 100%),linear-gradient(0deg,rgba(4,18,34,.95),transparent 48%),url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1900&q=85') center 48%/cover}
+    .hero>div{max-width:720px}.hero .eyebrow{background:#063d50c9;border-color:#137f96;color:#4de9f5}.hero h1{font-size:clamp(40px,4vw,60px);margin:16px 0 12px;letter-spacing:-1.9px}.hero h1 span{background:linear-gradient(90deg,#22e3f2,#b28bff);background-clip:text;-webkit-background-clip:text;color:transparent}.lead{color:#d1e0f1;max-width:700px}.hero-card{display:none}.hero-actions{gap:12px}.btn{border-radius:11px;transition:transform .18s,filter .18s,box-shadow .18s}.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px #0003}.btn.primary{background:linear-gradient(110deg,#23dff2,#38e4c0);color:#042035}
+    .shortcut-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 0 20px}.shortcut{display:flex;align-items:center;gap:13px;min-width:0;padding:16px 14px;border:1px solid;border-radius:16px;text-decoration:none!important;transition:transform .2s,filter .2s}.shortcut:hover{transform:translateY(-3px);filter:brightness(1.12)}.shortcut>span:nth-child(2){display:flex;flex-direction:column;gap:4px;min-width:0}.shortcut strong{font-size:14px;color:#fff}.shortcut small{font-size:11px;line-height:1.45;color:#c1d1e4}.shortcut b{margin-left:auto;font-size:21px;font-weight:500}.shortcut-icon{width:46px;height:46px;display:grid;place-items:center;flex-shrink:0;border-radius:50%;font-size:23px;color:#fff}.shortcut-jobs{background:linear-gradient(120deg,#073b63,#06233e);border-color:#087bb0}.shortcut-jobs .shortcut-icon{background:linear-gradient(135deg,#19c9ff,#0874df)}.shortcut-jobs b{color:#38e5ff}.shortcut-news{background:linear-gradient(120deg,#25184e,#101d3c);border-color:#6243ad}.shortcut-news .shortcut-icon{background:linear-gradient(135deg,#ce78ff,#7142dc)}.shortcut-news b{color:#c99bff}.shortcut-currency{background:linear-gradient(120deg,#06483e,#052c35);border-color:#008c78}.shortcut-currency .shortcut-icon{background:linear-gradient(135deg,#20e4b0,#009e91)}.shortcut-currency b{color:#30e8c4}.shortcut-holidays{background:linear-gradient(120deg,#503018,#241c1c);border-color:#ad6b21}.shortcut-holidays .shortcut-icon{background:linear-gradient(135deg,#ffca67,#ff8a17)}.shortcut-holidays b{color:#ffd39a}
+    .stats{display:none}.section-head{align-items:center}.section-head h2{font-size:18px}.section-head p{font-size:11px}.section-label{font-size:10px}.panel{background:linear-gradient(160deg,#0b2740,#081a2d);border:1px solid #174a68;border-radius:16px;padding:15px;box-shadow:0 12px 30px #0002}.section-head .pill{font-size:10px;white-space:nowrap}
+    #jobs{grid-column:span 4;margin:0 0 20px;min-width:0}#news{grid-column:span 3;margin:0 0 20px;min-width:0}.tools-grid{display:contents}#currency{grid-column:span 2;margin:0 0 20px;min-width:0}#holidays{grid-column:span 3;margin:0 0 20px;min-width:0}
+    .job-grid,.news-grid{grid-template-columns:1fr;gap:9px}.job,.news,.holiday{background:#071b2e;border:1px solid #123b57;border-radius:12px;padding:12px}.job h3,.news h3{font-size:13px}.company,.job p,.news p{font-size:11px}.tag{font-size:9px}.toolbar{gap:7px}.toolbar input,.toolbar select{flex-basis:100%;width:100%}input,select{font-size:12px;padding:10px}.convert-row{display:flex;flex-direction:column;gap:7px}.convert-row>*{width:100%}.convert-row span{display:none!important}.tool-title{font-size:17px!important}.tool-desc{font-size:11px;line-height:1.55}.result{padding:13px}.result strong{font-size:21px}.holiday-list{gap:8px}.holiday strong{font-size:12px}.holiday span{font-size:10px}.status{font-size:11px}.note{display:none}footer{margin-left:242px;background:#04182b;border-top-color:#143c56}footer .wrap{width:auto;max-width:none;padding:15px 24px;display:flex;gap:10px;justify-content:space-between;font-size:11px}
+    @media(max-width:1250px){main.wrap{grid-template-columns:repeat(6,minmax(0,1fr))}#jobs{grid-column:span 3}#news{grid-column:span 3}#currency{grid-column:span 3}#holidays{grid-column:span 3}.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){header{position:sticky;inset:auto;width:100%;height:auto;border-right:0;border-bottom:1px solid #123b57}.nav{padding:10px 14px;gap:10px}.brand{font-size:18px}.logo{width:40px;height:40px}nav{flex-direction:row;overflow-x:auto;gap:5px}nav a{white-space:nowrap;padding:9px 10px;font-size:12px}nav a:before{display:none}.sidebar-note{display:none}main.wrap{margin:0 14px;width:auto;padding:0;display:block}.hero{margin:0 -14px 14px;padding:38px 20px 26px;min-height:300px;border-radius:0 0 18px 18px}.hero:before{background-position:center}.hero h1{font-size:40px}.shortcut-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.shortcut{padding:12px 10px;gap:9px}.shortcut-icon{width:36px;height:36px;font-size:18px}.shortcut strong{font-size:12px}.shortcut small{font-size:10px}.shortcut b{display:none}#jobs,#news,#currency,#holidays{margin:0 0 15px}.panel{padding:13px}.job-grid,.news-grid{grid-template-columns:1fr}footer{margin-left:0}footer .wrap{padding:14px;flex-direction:column}}
+    @media(max-width:420px){.shortcut-grid{grid-template-columns:1fr}.hero h1{font-size:34px}.hero{min-height:275px}.brand small{font-size:9px}}
+
+    /* Keep the landing page uncluttered until a tool is selected. */
+    #jobs,#news,.tools-grid{display:none}
+    #jobs.section-active,#news.section-active{display:block;grid-column:1/-1;margin:10px 0 22px}
+    .tools-grid.section-active{display:grid;grid-template-columns:minmax(0,1fr);grid-column:1/-1;margin:10px 0 22px}
+    .tools-grid.section-active #currency,.tools-grid.section-active #holidays{display:none;grid-column:1/-1;margin:0;width:100%}
+    .tools-grid.section-active #currency.section-active,.tools-grid.section-active #holidays.section-active{display:block}
+    .section-back{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:8px 12px;border:1px solid #24516b;border-radius:10px;color:#b9eaf2;background:#0a2438;cursor:pointer;font:inherit;font-size:12px}
+    .section-back:hover{background:#103650;color:#fff}
+    .shortcut.active{outline:2px solid currentColor;outline-offset:2px;filter:brightness(1.12)}
+    nav a.active{background:#075078;color:#48eaff}
+    .stats{display:none!important}
+    .toolbar select option{background:#0a2036;color:#fff}
+    @media(max-width:760px){.tools-grid.section-active{display:block}.tools-grid.section-active #currency.section-active,.tools-grid.section-active #holidays.section-active{display:block}}
+
+
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" style="color:inherit;text-decoration:none">
+      <span class="logo">CC</span><span>Career Compass<small>Student opportunity hub</small></span>
+    </a>
+    <nav>
+      <a href="#jobs">Jobs</a><a href="#news">Tech News</a><a href="#currency">Currency</a><a href="#holidays">Holidays</a>
+    </nav>
+    <div class="account-bar" id="accountBar">
+      <input id="accountEmail" type="email" placeholder="Email" autocomplete="email" aria-label="Account email">
+      <input id="accountPassword" type="password" placeholder="Password (10+ chars)" autocomplete="current-password" aria-label="Account password">
+      <button class="btn" id="loginBtn" type="button">Sign in</button>
+      <button class="btn primary" id="registerBtn" type="button">Create account</button>
+      <button class="btn" id="logoutBtn" type="button" hidden>Sign out</button>
+      <span id="accountMessage" class="status" role="status"></span>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="top">
+  <div class="hero">
+    <div>
+      <span class="eyebrow">✦ Your personal opportunity hub</span>
+      <h1>Your next opportunity<br>starts <span>here.</span></h1>
+      <p class="lead">Discover remote jobs, follow technology trends, compare currencies, and check public holidays — all in one simple dashboard built for students.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#jobs">Explore opportunities ↗</a>
+        <button class="btn" id="refreshBtn">↻ Refresh data</button>
+      </div>
+    </div>
+    <aside class="hero-card">
+      <div class="mini-title">Your career workspace</div>
+      <h2>Explore. Learn. Grow.</h2>
+      <p>Everything you need to explore opportunities, stay informed, and plan ahead.</p>
+      
+    </aside>
+  </div>
+
+  <div class="shortcut-grid" aria-label="Dashboard shortcuts">
+    <a class="shortcut shortcut-jobs" href="#jobs"><span class="shortcut-icon">▣</span><span><strong>Job Explorer</strong><small>Search and discover opportunities</small></span><b>↗</b></a>
+    <a class="shortcut shortcut-news" href="#news"><span class="shortcut-icon">▤</span><span><strong>Tech News</strong><small>Stay updated with latest trends</small></span><b>↗</b></a>
+    <a class="shortcut shortcut-currency" href="#currency"><span class="shortcut-icon">⇄</span><span><strong>Currency Converter</strong><small>Check exchange rates</small></span><b>↗</b></a>
+    <a class="shortcut shortcut-holidays" href="#holidays"><span class="shortcut-icon">▦</span><span><strong>Holidays</strong><small>Explore holidays by country</small></span><b>↗</b></a>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="emoji">💼</span><div class="number" id="jobCount">—</div><div class="label">Jobs loaded</div></div>
+    <div class="stat"><span class="emoji">📰</span><div class="number" id="newsCount">—</div><div class="label">Tech stories</div></div>
+    <div class="stat"><span class="emoji">📅</span><div class="number" id="holidayCount">—</div><div class="label">Holidays listed</div></div>
+    <div class="stat"><span class="emoji">🔌</span><div class="number">4</div><div class="label">Helpful tools</div></div>
+  </div>
+
+  <section id="jobs"><button class="section-back" type="button" data-home>← Back to dashboard</button>
+    <div class="section-head"><div><div class="section-label">CAREER</div><h2>Job Explorer</h2><p>Search and filter opportunities that match your interests.</p></div><span class="pill" id="jobsStatus">Loading jobs…</span></div>
+    <div class="panel">
+      <div class="toolbar">
+        <input id="jobSearch" type="search" placeholder="Search title, company, or skill…" aria-label="Search jobs">
+        <select id="sourceFilter" aria-label="Filter job source"><option value="all">All sources</option><option value="Remotive">Remote listings</option><option value="Arbeitnow">Job board listings</option></select>
+        <select id="typeFilter" aria-label="Filter job type"><option value="all">All job types</option><option value="remote">Remote only</option><option value="full-time">Full-time</option><option value="part-time">Part-time</option></select>
+      </div>
+      <div id="jobGrid" class="job-grid"><div class="empty">Select Job Explorer to view opportunities.</div></div>
+      <p class="status" id="jobMessage">Your matching opportunities will appear here.</p>
+    </div>
+  </section>
+
+  <section id="news"><button class="section-back" type="button" data-home>← Back to dashboard</button>
+    <div class="section-head"><div><div class="section-label">DISCOVER</div><h2>What's happening in tech?</h2><p>Explore popular technology stories and ideas.</p></div></div>
+    <div class="panel">
+      <div id="newsGrid" class="news-grid"><div class="empty">Select Tech News to explore stories.</div></div>
+      <p id="newsMessage" class="status"></p>
+    </div>
+  </section>
+
+  <section class="tools-grid">
+    <div class="panel" id="currency"><button class="section-back" type="button" data-home>← Back to dashboard</button>
+      <div class="section-label">TOOLS</div><h2 class="tool-title">💱 Currency converter</h2>
+      <p class="tool-desc">Convert between currencies using reference exchange rates.</p>
+      <label for="amount" class="company">Amount</label>
+      <div class="convert-row"><input id="amount" type="number" min="0" step="any" value="100" aria-label="Amount to convert"><select id="fromCurrency" aria-label="From currency"><option>USD</option><option>EUR</option><option>INR</option><option>GBP</option><option>JPY</option><option>AUD</option><option>CAD</option><option>CHF</option></select></div>
+      <label for="toCurrency" class="company">Convert to</label>
+      <div class="convert-row"><span style="display:flex;align-items:center;color:var(--muted);font-size:12px">Choose target currency</span><select id="toCurrency" aria-label="To currency"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>AUD</option><option>CAD</option><option>CHF</option></select></div>
+      <button class="btn primary" id="convertBtn" style="width:100%;margin-top:5px">Convert amount</button>
+      <div class="result"><small id="conversionCaption">Converted amount</small><strong id="conversionResult">—</strong></div>
+      <p id="currencyMessage" class="status">Choose currencies and an amount to get started.</p>
+    </div>
+    <div class="panel" id="holidays"><button class="section-back" type="button" data-home>← Back to dashboard</button>
+      <div class="section-label">PLAN AHEAD</div><h2 class="tool-title" id="holidayTitle">📅 Public holidays</h2>
+      <p class="tool-desc">Choose a country and year to explore public holidays.</p>
+      <div class="toolbar" style="margin-bottom:10px">
+        <select id="holidayCountry" aria-label="Holiday country" style="width:100%"><option value="IN">India</option><option value="US">United States</option><option value="GB">United Kingdom</option><option value="CA">Canada</option><option value="AU">Australia</option><option value="NZ">New Zealand</option><option value="DE">Germany</option><option value="FR">France</option><option value="IT">Italy</option><option value="ES">Spain</option><option value="NL">Netherlands</option><option value="JP">Japan</option><option value="BR">Brazil</option><option value="ZA">South Africa</option><option value="SG">Singapore</option><option value="MX">Mexico</option><option value="CH">Switzerland</option><option value="AT">Austria</option><option value="BE">Belgium</option><option value="PL">Poland</option><option value="SE">Sweden</option><option value="NO">Norway</option><option value="FI">Finland</option><option value="IE">Ireland</option></select>
+        <select id="holidayYear" aria-label="Holiday year" style="width:100%"></select>
+        <input id="holidaySearch" type="search" placeholder="Find a holiday…" aria-label="Search holidays" style="flex-basis:100%">
+      </div>
+      <div id="holidayList" class="holiday-list"><div class="empty">Select Holidays to browse upcoming dates.</div></div>
+      <p id="holidayMessage" class="status"></p>
+    </div>
+  </section>
+  
+</main>
+<footer><div class="wrap"><span><strong style="color:var(--text)">Career Compass</strong> · Explore. Learn. Grow.</span><span>Your next step starts here.</span></div></footer>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  let jobs = [];
+  let stories = [];
+  let holidays = [];
+  const savedJobs = new Set();
+  let authToken = sessionStorage.getItem("cc_token") || "";
+  const apiFetch = async (path, options = {}) => {
+    const headers = { ...(options.headers || {}) };
+    if (options.body) headers["Content-Type"] = "application/json";
+    if (authToken) headers.Authorization = `Bearer ${authToken}`;
+    const response = await fetch(path, { ...options, headers });
+    const text = await response.text();
+    let data = {};
+    try { data = text ? JSON.parse(text) : {}; } catch { throw new Error("The server returned an invalid response."); }
+    if (!response.ok) throw new Error(data.error || `Request failed (${response.status})`);
+    return data;
+  };
+  function setAccountMessage(text, error = false) {
+    $("accountMessage").textContent = text;
+    $("accountMessage").className = "status" + (error ? " error" : " ok");
+  }
+  function updateAccountUI(email = "") {
+    const loggedIn = Boolean(authToken);
+    $("accountEmail").hidden = loggedIn;
+    $("accountPassword").hidden = loggedIn;
+    $("loginBtn").hidden = loggedIn;
+    $("registerBtn").hidden = loggedIn;
+    $("logoutBtn").hidden = !loggedIn;
+    if (loggedIn && email) setAccountMessage(`Signed in as ${email}`);
+    else if (loggedIn) setAccountMessage("Signed in. Saved jobs sync to your account.");
+  }
+  async function accountAction(kind) {
+    const email = $("accountEmail").value.trim();
+    const password = $("accountPassword").value;
+    if (!email || !password) return setAccountMessage("Enter your email and password first.", true);
+    try {
+      const data = await apiFetch(`/api/auth/${kind}`, { method: "POST", body: JSON.stringify({ email, password }) });
+      authToken = data.token; sessionStorage.setItem("cc_token", authToken);
+      updateAccountUI(data.user.email); $("accountPassword").value = "";
+      await syncSavedJobs();
+    } catch (e) { setAccountMessage(e.message, true); }
+  }
+  async function syncSavedJobs() {
+    if (!authToken) return;
+    try {
+      const rows = await apiFetch("/api/saved-jobs");
+      savedJobs.clear(); rows.forEach(row => savedJobs.add(row.key));
+      if (jobs.length) renderJobs();
+    } catch (e) { if (/sign in/i.test(e.message)) { authToken = ""; sessionStorage.removeItem("cc_token"); updateAccountUI(); } }
+  }
+
+  function safeText(value, fallback = "Not specified") {
+    if (value === null || value === undefined || value === "") return fallback;
+    return String(value);
+  }
+  function stripHtml(value) {
+    const el = document.createElement("div");
+    el.innerHTML = value || "";
+    return (el.textContent || el.innerText || "").replace(/\s+/g, " ").trim();
+  }
+  function dateLabel(value) {
+    if (!value) return "Date not listed";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    return date.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  }
+  function makeJob({title, company, location, type, url, source, date, description}) {
+    return {
+      title: safeText(title, "Untitled role"),
+      company: safeText(company, "Company not listed"),
+      location: safeText(location, "Location not listed"),
+      type: safeText(type, "Type not listed"),
+      url: url || "#",
+      source,
+      date: date || "",
+      description: stripHtml(description).slice(0, 220)
+    };
+  }
+  // The sprint restricts the project to the five approved APIs, so we do not
+  // call a separate translation service. This conservative check hides likely
+  // German-language listings instead of showing them as if they were English.
+  function looksEnglishJob(job) {
+    const text = [job.title, job.location, job.type, job.description].join(" ").toLowerCase();
+    const germanMarkers = [
+      /[äöüß]/i, /\\b(und|oder|mit|für|bei|über|entwickler|entwicklerin|kenntnisse|berufserfahrung|bewerbung|vollzeit|teilzeit|arbeitnehmer|unternehmen|aufgaben|anforderungen|wir suchen|deutschland|münchen|köln|düsseldorf|österreich|schweiz)\\b/i
+    ];
+    return !germanMarkers.some(pattern => pattern.test(text));
+  }
+
+  async function fetchJson(url) {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Request failed (" + response.status + ")");
+    return response.json();
+  }
+
+  async function loadRemotive() { return []; }
+  async function loadArbeitnow() { return []; }
+  async function loadJobsFromBackend() {
+    const data = await apiFetch("/api/jobs");
+    return (Array.isArray(data) ? data : []).map(j => makeJob({ title:j.title, company:j.company, location:j.location, type:j.type, url:j.url, source:j.source, date:j.date, description:j.description }))
+      .filter(looksEnglishJob).slice(0, 40);
+  }
+  function renderJobs() {
+    const q = $("jobSearch").value.trim().toLowerCase();
+    const source = $("sourceFilter").value;
+    const type = $("typeFilter").value;
+    const filtered = jobs.filter(j => {
+      const haystack = [j.title, j.company, j.location, j.type, j.description].join(" ").toLowerCase();
+      const isRemote = /remote/i.test([j.location, j.type, j.description].join(" "));
+      const isFull = /full.?time/i.test(j.type);
+      const isPart = /part.?time/i.test(j.type);
+      return (!q || haystack.includes(q)) &&
+        (source === "all" || j.source === source) &&
+        (type === "all" || (type === "remote" && isRemote) || (type === "full-time" && isFull) || (type === "part-time" && isPart));
+    });
+    $("jobCount").textContent = jobs.length;
+    $("jobsStatus").textContent = jobs.length ? jobs.length + " listings loaded" : "No listings loaded";
+    if (!filtered.length) {
+      $("jobGrid").innerHTML = '<div class="empty">No matching jobs found. Try a different search or filter.</div>';
+      return;
+    }
+    $("jobGrid").innerHTML = filtered.map((j) => {
+      const key = j.source + "|" + j.url;
+      const isSaved = savedJobs.has(key);
+      return `<article class="job">
+        <div class="job-top"><span class="tag ${j.source === "Remotive" ? "remotive" : "arbeitnow"}">${j.source === "Remotive" ? "Remote listing" : "Job board"}</span><span class="company">${dateLabel(j.date)}</span></div>
+        <h3>${escapeHtml(j.title)}</h3><div class="company">${escapeHtml(j.company)}</div>
+        <div class="job-meta"><span>📍 ${escapeHtml(j.location)}</span><span>◷ ${escapeHtml(j.type)}</span></div>
+        ${j.description ? `<p class="company">${escapeHtml(j.description)}${j.description.length >= 220 ? "…" : ""}</p>` : ""}
+        <div class="job-footer"><a class="small-link" href="${safeUrl(j.url)}" target="_blank" rel="noopener noreferrer">View opportunity ↗</a><button class="save ${isSaved ? "saved" : ""}" data-save="${escapeAttr(key)}">${isSaved ? "★ Saved" : "☆ Save"}</button></div>
+      </article>`;
+    }).join("");
+  }
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function escapeAttr(value) { return escapeHtml(value); }
+  function safeUrl(value) {
+    try {
+      const url = new URL(value);
+      return ["https:", "http:"].includes(url.protocol) ? escapeAttr(url.href) : "#";
+    } catch { return "#"; }
+  }
+
+  async function loadNews() {
+    stories = await apiFetch("/api/news");
+    $("newsCount").textContent = stories.length;
+    if (!stories.length) throw new Error("No stories could be loaded.");
+    $("newsGrid").innerHTML = stories.map(s => {
+      const link = s.url || `https://news.ycombinator.com/item?id=${s.id}`;
+      return `<article class="news"><span class="tag remotive">TECH STORY</span><h3><a href="${safeUrl(link)}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.title || "Untitled story")}</a></h3><p>${s.text ? escapeHtml(stripHtml(s.text).slice(0, 150)) : "Open the story to read more and join the discussion."}</p><div class="news-foot"><span>▲ ${Number(s.score || 0)} points</span><span>💬 ${Number(s.descendants || 0)} comments</span></div></article>`;
+    }).join("");
+    $("newsMessage").textContent = "Story rankings can change throughout the day.";
+  }
+
+  async function convertCurrency() {
+    const amount = Number($("amount").value);
+    const from = $("fromCurrency").value;
+    const to = $("toCurrency").value;
+    if (!Number.isFinite(amount) || amount < 0) {
+      $("currencyMessage").textContent = "Enter a valid amount of zero or more.";
+      $("currencyMessage").className = "status error";
+      return;
+    }
+    $("convertBtn").disabled = true;
+    $("convertBtn").textContent = "Converting…";
+    try {
+      if (from === to) {
+        $("conversionResult").textContent = new Intl.NumberFormat(undefined, {maximumFractionDigits: 2}).format(amount) + " " + to;
+        $("conversionCaption").textContent = "Same currency";
+        $("currencyMessage").textContent = "No conversion needed because both currencies match.";
+        $("currencyMessage").className = "status ok";
+        return;
+      }
+      const data = await apiFetch(`/api/currency?base=${encodeURIComponent(from)}&symbols=${encodeURIComponent(to)}`);
+      const rate = data.rates && data.rates[to];
+      if (!rate) throw new Error("Rate not available for this currency pair.");
+      const converted = amount * rate;
+      $("conversionResult").textContent = new Intl.NumberFormat(undefined, {maximumFractionDigits: 2}).format(converted) + " " + to;
+      $("conversionCaption").textContent = `${amount} ${from} × ${rate} ${to} per ${from}`;
+      $("currencyMessage").textContent = "Rate date: " + (data.date || "not supplied") + ". Reference rate only.";
+      $("currencyMessage").className = "status ok";
+    } catch (e) {
+      $("currencyMessage").textContent = "Currency conversion failed: " + e.message + " Try again later.";
+      $("currencyMessage").className = "status error";
+    } finally {
+      $("convertBtn").disabled = false;
+      $("convertBtn").textContent = "Convert amount";
+    }
+  }
+
+  // Holidays from the uploaded Dhirubhai Ambani University (DAU) 2026 circular.
+  // The circular lists 19 institute holidays plus 4 public holidays falling on weekends.
+  const dauHolidays2026 = [
+    ["2026-01-01", "Christian New Year Day"],
+    ["2026-01-14", "Makar Sankranti"],
+    ["2026-01-26", "Republic Day"],
+    ["2026-03-04", "Holi / Dhuleti"],
+    ["2026-03-26", "Shree Ram Navmi"],
+    ["2026-03-31", "Mahavir Jayanti"],
+    ["2026-04-03", "Good Friday"],
+    ["2026-04-14", "Dr. Baba Saheb Ambedkar's Birthday"],
+    ["2026-05-01", "Buddha Purnima"],
+    ["2026-05-27", "Eid-Ul-Adha (Bakri-Eid)"],
+    ["2026-06-26", "Muharram"],
+    ["2026-08-28", "Raksha Bandhan"],
+    ["2026-09-04", "Janmashtami"],
+    ["2026-10-02", "Mahatma Gandhi's Birthday"],
+    ["2026-10-20", "Dusshera (Vijaya Dashmi)"],
+    ["2026-11-10", "Vikram Samvant New Year Day"],
+    ["2026-11-11", "Bhai Bij"],
+    ["2026-11-24", "Guru Nanak's Birthday"],
+    ["2026-12-25", "Christmas"],
+    ["2026-02-15", "Maha Shivratri (Sunday)"],
+    ["2026-03-21", "Ramjan-Eid (Saturday)"],
+    ["2026-08-15", "Independence Day & Parsi New Year (Saturday)"],
+    ["2026-11-08", "Diwali (Sunday)"]
+  ].map(([date, name]) => ({
+    date, name, localName: name, holidayTypes: ["DAU"], source: "DAU Holiday List 2026"
+  }));
+
+  function mergeDauHolidays(list, country, year) {
+    if (country !== "IN") return list;
+    // The uploaded DAU circular only provides dates for 2026. Keep its holiday names
+    // available for every selected year by carrying the month/day forward; note below
+    // that dates for lunar/religious holidays can differ in other years.
+    const dauForYear = dauHolidays2026.map(h => ({
+      ...h,
+      date: `${year}${h.date.slice(4)}`,
+      source: ""
+    }));
+    const merged = [...list];
+    for (const h of dauForYear) {
+      const duplicate = merged.some(existing =>
+        existing.date === h.date &&
+        String(existing.name || existing.localName || existing.nameEn || "").toLowerCase() === h.name.toLowerCase()
+      );
+      if (!duplicate) merged.push(h);
+    }
+    return merged.sort((a, b) => String(a.date).localeCompare(String(b.date)));
+  }
+
+  async function loadHolidays() {
+    const year = Number($("holidayYear").value);
+    const country = $("holidayCountry").value;
+    const countryName = $("holidayCountry").selectedOptions[0]?.textContent || country;
+    const message = $("holidayMessage");
+    $("holidayTitle").textContent = `📅 ${countryName} public holidays`;
+    let apiError = null;
+    try {
+      const data = await apiFetch(`/api/holidays?country=${encodeURIComponent(country)}&year=${encodeURIComponent(year)}`);
+      if (!Array.isArray(data)) throw new Error("Holiday list was not valid.");
+      holidays = data.map(h => ({...h, name: h.name || h.localName || h.nameEn || "Public holiday", holidayTypes: h.holidayTypes || h.types || []}));
+      holidays = mergeDauHolidays(holidays, country, year);
+      $("holidayCount").textContent = holidays.length;
+      renderHolidays();
+      message.textContent = `Loaded ${holidays.length} holidays for ${countryName} in ${year}.`;
+      message.className = "status ok";
+      return;
+    } catch (e) { apiError = e; }
+    // Offline fallback: show Indian fixed-date national holidays plus the DAU list
+    // for every selected year, without displaying a scary API error banner.
+    if (country === "IN") {
+      holidays = [
+        { date: `${year}-01-26`, name: "Republic Day", holidayTypes: ["Public"], source: "India national holiday" },
+        { date: `${year}-08-15`, name: "Independence Day", holidayTypes: ["Public"], source: "India national holiday" },
+        { date: `${year}-10-02`, name: "Gandhi Jayanti", holidayTypes: ["Public"], source: "India national holiday" }
+      ];
+      holidays = mergeDauHolidays(holidays, country, year);
+      $("holidayCount").textContent = holidays.length;
+      renderHolidays();
+      message.textContent = `Loaded ${holidays.length} holidays for ${countryName} in ${year}.`;
+      message.className = "status ok";
+      return;
+    } else {
+      holidays = [];
+      $("holidayCount").textContent = "—";
+      $("holidayList").innerHTML = '<div class="empty">Could not load holidays. Check your connection and try again.</div>';
+      message.textContent = `Could not load ${countryName} holidays: ${apiError ? apiError.message : "unknown error"}.`;
+    }
+    message.className = "status error";
+  }
+  function renderHolidays() {
+    const q = $("holidaySearch").value.trim().toLowerCase();
+    const matches = holidays.filter(h => [h.name, h.date, (h.holidayTypes || h.types || []).join(" ")].join(" ").toLowerCase().includes(q));
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let visible;
+    if (q) {
+      // When the user searches, show matching holidays across the selected year's list.
+      visible = matches.slice().sort((a, b) => String(a.date || "").localeCompare(String(b.date || ""))).slice(0, 12);
+    } else {
+      // Default view: only the next three upcoming holidays.
+      visible = matches
+        .filter(h => /^\d{4}-\d{2}-\d{2}$/.test(h.date || "") && new Date(`${h.date}T00:00:00`) >= today)
+        .sort((a, b) => String(a.date).localeCompare(String(b.date)))
+        .slice(0, 3);
+    }
+    if (!visible.length) {
+      $("holidayList").innerHTML = `<div class="empty">${q ? "No matching holidays for this year." : "No upcoming holidays found for this year. Search to see other holidays."}</div>`;
+      $("holidayMessage").textContent = q
+        ? `No matching holidays for ${$("holidayCountry").selectedOptions[0]?.textContent || "selected country"} in ${yearLabel()}.`
+        : `Showing the next 0 upcoming holidays for ${$("holidayCountry").selectedOptions[0]?.textContent || "selected country"} in ${yearLabel()}.`;
+      return;
+    }
+    $("holidayList").innerHTML = visible.map(h => `<div class="holiday"><div><strong>${escapeHtml(h.name || "Public holiday")}</strong><div class="company">${escapeHtml(h.source || (h.name || ""))}</div></div><span>${dateLabel(h.date)}</span></div>`).join("");
+    const countryName = $("holidayCountry").selectedOptions[0]?.textContent || "selected country";
+    $("holidayMessage").textContent = q
+      ? `Showing ${visible.length} matching holiday${visible.length === 1 ? "" : "s"} for ${countryName} in ${yearLabel()}.`
+      : `Showing the next ${visible.length} upcoming holidays for ${countryName} in ${yearLabel()}. Search to see other holidays.`;
+  }
+  function yearLabel() { return $("holidayYear").value; }
+
+  let activeSection = null;
+  const loadedSections = new Set();
+
+  async function loadJobsSection() {
+    $("refreshBtn").disabled = true;
+    $("refreshBtn").textContent = "↻ Loading…";
+    $("jobMessage").className = "status";
+    $("jobMessage").textContent = "Finding opportunities…";
+    try {
+      jobs = await loadJobsFromBackend();
+      const seen = new Set();
+      jobs = jobs.filter(j => { const key = (j.url || "").toLowerCase(); if (seen.has(key)) return false; seen.add(key); return true; });
+      renderJobs();
+      $("jobMessage").textContent = "Showing available opportunities. Sign in to save jobs permanently to your account.";
+      $("jobMessage").className = "status ok";
+    } catch (e) {
+      jobs = []; renderJobs();
+      $("jobMessage").textContent = e.message || "Could not load jobs. Make sure the backend is running.";
+      $("jobMessage").className = "status error";
+    }
+    $("refreshBtn").disabled = false; $("refreshBtn").textContent = "↻ Refresh current section";
+  }
+
+  async function activateSection(id, forceRefresh = false) {
+    const valid = ["jobs", "news", "currency", "holidays"];
+    if (!valid.includes(id)) { showDashboard(); return; }
+    activeSection = id;
+    document.body.classList.add("section-open");
+    $("jobs").classList.toggle("section-active", id === "jobs");
+    $("news").classList.toggle("section-active", id === "news");
+    document.querySelector(".tools-grid").classList.toggle("section-active", id === "currency" || id === "holidays");
+    $("currency").classList.toggle("section-active", id === "currency");
+    $("holidays").classList.toggle("section-active", id === "holidays");
+    document.querySelectorAll('.shortcut, nav a').forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
+    if (forceRefresh || !loadedSections.has(id)) {
+      try {
+        if (id === "jobs") await loadJobsSection();
+        if (id === "news") await loadNews();
+        if (id === "currency") await convertCurrency();
+        if (id === "holidays") await loadHolidays();
+        loadedSections.add(id);
+      } catch (e) {
+        const target = id === "jobs" ? "jobGrid" : id === "news" ? "newsGrid" : id === "holidays" ? "holidayList" : "currencyMessage";
+        $(target).innerHTML !== undefined && id !== "currency" ? $(target).innerHTML = '<div class="empty">This section could not load. Check your connection and try again.</div>' : null;
+        if (id === "currency") $("currencyMessage").textContent = "Conversion unavailable. Check your connection and try again.";
+      }
+    }
+    if (id !== "jobs") { $("refreshBtn").disabled = false; $("refreshBtn").textContent = "↻ Refresh current section"; }
+    if (window.innerWidth < 760) document.getElementById(id).scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
+  function showDashboard() {
+    activeSection = null;
+    document.body.classList.remove("section-open");
+    ["jobs", "news", "currency", "holidays"].forEach(id => $(id).classList.remove("section-active"));
+    document.querySelector(".tools-grid").classList.remove("section-active");
+    document.querySelectorAll('.shortcut, nav a').forEach(a => a.classList.remove("active"));
+    history.replaceState(null, "", location.pathname + location.search);
+  }
+
+  // Populate the current year and adjacent years.
+  const currentYear = new Date().getFullYear();
+  $("holidayYear").innerHTML = [currentYear - 1, currentYear, currentYear + 1].map(y => `<option value="${y}" ${y === currentYear ? "selected" : ""}>${y}</option>`).join("");
+  $("jobSearch").addEventListener("input", renderJobs);
+  $("sourceFilter").addEventListener("change", renderJobs);
+  $("typeFilter").addEventListener("change", renderJobs);
+  $("holidaySearch").addEventListener("input", renderHolidays);
+  $("holidayCountry").addEventListener("change", () => {
+    $("holidayList").innerHTML = '<div class="empty">Loading holidays…</div>';
+    loadHolidays().catch(e => { $("holidayList").innerHTML = '<div class="empty">Could not load holidays.</div>'; $("holidayMessage").textContent = e.message; $("holidayMessage").className = "status error"; });
+  });
+  $("holidayYear").addEventListener("change", () => {
+    $("holidayList").innerHTML = '<div class="empty">Loading holidays…</div>';
+    loadHolidays().catch(e => {
+      $("holidayList").innerHTML = '<div class="empty">Could not load holidays for this year.</div>';
+      $("holidayMessage").textContent = e.message;
+      $("holidayMessage").className = "status error";
+    });
+  });
+  $("convertBtn").addEventListener("click", convertCurrency);
+  $("refreshBtn").addEventListener("click", () => { if (activeSection) activateSection(activeSection, true); });
+  $("jobGrid").addEventListener("click", async e => {
+    const btn = e.target.closest("[data-save]");
+    if (!btn) return;
+    const key = btn.getAttribute("data-save");
+    const job = jobs.find(j => `${j.source}|${j.url}` === key);
+    if (!authToken) { setAccountMessage("Sign in or create an account to save jobs permanently.", true); $("accountEmail").focus(); return; }
+    btn.disabled = true;
+    try {
+      if (savedJobs.has(key)) {
+        await apiFetch(`/api/saved-jobs/${encodeURIComponent(key)}`, { method: "DELETE" });
+        savedJobs.delete(key);
+      } else {
+        await apiFetch("/api/saved-jobs", { method: "POST", body: JSON.stringify({ key, job }) });
+        savedJobs.add(key);
+      }
+      renderJobs();
+    } catch (err) { setAccountMessage(err.message, true); btn.disabled = false; }
+  });
+  $("loginBtn").addEventListener("click", () => accountAction("login"));
+  $("registerBtn").addEventListener("click", () => accountAction("register"));
+  $("logoutBtn").addEventListener("click", () => { authToken = ""; sessionStorage.removeItem("cc_token"); savedJobs.clear(); updateAccountUI(); if (jobs.length) renderJobs(); setAccountMessage("Signed out."); });
+  updateAccountUI();
+  if (authToken) { apiFetch("/api/auth/me").then(d => { updateAccountUI(d.user.email); return syncSavedJobs(); }).catch(() => { authToken=""; sessionStorage.removeItem("cc_token"); updateAccountUI(); }); }
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    const id = a.getAttribute("href").slice(1);
+    if (["jobs", "news", "currency", "holidays"].includes(id)) {
+      a.addEventListener("click", e => { e.preventDefault(); activateSection(id); history.replaceState(null, "", "#" + id); });
+    }
+  });
+  document.querySelectorAll("[data-home]").forEach(button => button.addEventListener("click", showDashboard));
+  showDashboard();
+</script>
+</body>
+</html>
